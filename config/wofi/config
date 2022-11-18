@@ -1,0 +1,29 @@
+width=1200
+height=800
+mode=drun
+term=alacritty
+allow_markup=true
+allow_images=true
+prompt=Search
+insensitive=true
+no_actions=true
+## Geometry
+width=960px
+height=415px
+location=0
+#xoffset=10
+#yoffset=10
+#lines=8
+columns=2
+orientation=vertical
+halign=fill
+valign=center
+content_halign=fill
+line_wrap=off
+dynamic_lines=false
+## Other
+hide_scroll=true
+#no_actions=false
+sort_order=alphabetical
+gtk_dark=true
+filter_rate=100

@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+# Bail out if script fails
+set -e
+
+echo "Installing Packages"
+
+sudo pacman -S --noconfirm --needed xf86-video-amdgpu xf86-video-ati sway swaybg alacritty waybar wofi xorg-xwayland xorg-xlsclients glfw-wayland grim slurp brightnessctl ttf-liberation mako ntfs-3g bluez-utils neovim git flatpak xdg-user-dirs noto-fonts otf-font-awesome bash-completion xdg-desktop-portal-wlr polkit-gnome wl-clipboard bluez swayidle swaylock dnsmasq nm-connection-editor pcmanfm-gtk3 networkmanager-openvpn networkmanager-openconnect networkmanager-pptp networkmanager-vpnc ttf-fira-code ttf-fira-code-nerd starship mpv imv kanshi
+echo "Installing Flatpaks"
+
+flatpak install -y com.google.Chrome com.spotify.Client org.ferdium.Ferdium org.gtk.Gtk3theme.adw-gtk3-dark
+
+echo "Installing Paru [AUR helper]"
+
+sudo pacman -S --needed --noconfirm base-devel
+git clone https://aur.archlinux.org/paru.git
+cd paru
+makepkg -si
+
+echo "Installing packages from aur"
+
+paru -S --noconfirm linux-wifi-hotspot swaync cloudflare-warp-bin visual-studio-code-bin swaysettings-git adw-gtk3 ly
+
+echo "Configuring Sway And Login"
+
+echo "HandlePowerKey=ignore
+HandleLidSwitch=ignore" | sudo tee -a /etc/systemd/logind.conf
+
+echo "[Desktop Entry]
+Name=Sway
+Comment=An i3-compatible Wayland compositor
+Exec=sway --unsupported-gpu
+Type=Application" | sudo tee /usr/share/wayland-sessions/sway.desktop
+
+echo "Removing Unneeded Packages"
+
+sudo pacman -Rcs --noconfirm $(pacman -Qtdq)
+
+echo "Enabling Services"
+
+sudo systemctl enable bluetooth
+sudo systemctl enable ly
+
+cd ~
+
+cp -r ~/archlinux_sway/config ~/.config
+
+echo "127.0.0.1       localhost
+::1             localhost
+127.0.1.1       $HOSTNAME.localdomain   $HOSTNAME" | sudo tee /etc/hosts
+
+echo "blacklist pcspkr" | sudo tee /etc/modprobe.d/nobeep.conf
+
+echo "[main]
+dns=dnsmasq" | sudo tee /etc/NetworkManager/conf.d/dns.conf
+
+sudo flatpak override --env=GTK_THEME=adw-gtk3-dark
+
+echo "export GPG_TTY=$(tty)
+export XDG_CURRENT_DESKTOP=sway
+eval "$(starship init bash)"
+neofetch" | tee ~/.bashrc

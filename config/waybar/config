@@ -1,0 +1,227 @@
+// vim: ft=jsonc
+{
+  "layer": "bottom",
+  "position": "top",
+  "height": 37,
+  "spacing": 4,
+  "margin-top": 2,
+  "margin-left": 8,
+  "margin-right": 8,
+  "margin-bottom": 0,
+  "ipc": true,
+  "modules-left": [
+    "sway/workspaces",
+    "temperature",
+    "cpu",
+    "memory",
+    "sway/mode",
+    "sway/window"
+  ],
+  "modules-center": [
+    "clock"
+  ],
+  "modules-right": [
+    "idle_inhibitor",
+    "tray",
+    "gamemode",
+    "bluetooth",
+    "network#wifi",
+    "network#ethernet",
+    "backlight",
+    "pulseaudio",
+    "pulseaudio#mic",
+    "battery",
+    "custom/notification"
+  ],
+  "battery": {
+                "interval": 60,
+                "align": 0,
+                "rotate": 0,
+                //"bat": "BAT1",
+                //"adapter": "ACAD",
+                "full-at": 100,
+                "design-capacity": false,
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "<span font_family='Font Awesome 6 Free'></span> {capacity}%",
+        "format-plugged": "<span font_family='Font Awesome 6 Free'></span> {capacity}%",
+        "format-full": "<span font_family='Font Awesome 6 Free'>{icon}</span> Full",
+        //"format-good": "",
+        "format-alt": "{icon} {time}",
+        "format-icons": ["", "", "", "", ""],
+        "format-time": "{H}h {M}min",
+        "tooltip": true
+    },
+  "sway/workspaces": {
+    "disable-scroll-wraparound": true,
+    "disable-scroll": false,
+    "all-outputs": false,
+    "enable-bar-scroll": false,
+    "format": "{value}"
+  },
+  "sway/mode": {
+    "format": "<span>{}</span>"
+  },
+  "sway/window": {
+         "format": "{}",
+	 "max-length": 35
+     },
+  "tray": {
+    "reverse-direction": true,
+    "icon-size": 24,
+    "spacing": 10
+  },
+  "clock": {
+    "format": "{:%a %d %b %I:%M %p}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+  },
+  "temperature": {
+	"thermal-zone": 0,
+	"hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
+        "critical-threshold": 75,
+	"interval": 1,
+        "format": " {temperatureC}°C"
+        },
+
+        "cpu": {
+        "format": " {usage}%"
+  },
+  "cpu": {
+    "format": "<span font_family='Font Awesome 6 Free'></span> {usage}%",
+    "interval": 1
+  },
+  "memory": {
+    "interval": 10,
+    "format": "<span font_family='Font Awesome 6 Free'></span> {}%"
+  },
+  "custom/notification": {
+    "tooltip": true,
+    "format": "<span size='x-large' font_family='FiraCode Nerd Font Mono'>{icon}</span>",
+    "format-icons": {
+      "notification": "",
+      "none": "",
+      "dnd-notification": "",
+      "dnd-none": ""
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
+  },
+  "gamemode": {
+    "tooltip": true,
+    "format": "{glyph}",
+    "format-alt": "{glyph} {count}",
+    "glyph": "",
+    "not-running-hide": true,
+    "use-icon": true,
+    "icon-name": "input-gaming-symbolic",
+    "icon-spacing": 6
+  },
+  "custom/airplane": {
+    "tooltip": false,
+    "format": "{icon}",
+    "return-type": "json",
+    "max-length": 70,
+    "interval": "once",
+    "format-icons": {
+      "disabled": "<span foreground='#928374'>✈</span>",
+      "enabled": " ✈ "
+    },
+    "exec": "~/.config/waybar/scripts/airplaneMode.sh",
+    "on-click": "~/.config/waybar/scripts/airplaneMode.sh --toggle",
+    "signal": 8,
+    "escape": true
+  },
+  "bluetooth": {
+    "format": "",
+    "format-on": "",
+    "format-connected": " {num_connections}",
+    "format-connected-battery": " {num_connections}",
+    "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+    "on-click": "swaysettings -p bluetooth"
+  },
+  "network#wifi": {
+    "interface": "wl*",
+    "interval": 30,
+    "format": "{icon}",
+    "format-wifi": "{icon}",
+    "format-linked": "<span font_family='Font Awesome 6 Free'></span>",
+    "format-disconnected": "<span font_family='Font Awesome 6 Free'></span>",
+    "format-disabled": "直",
+    "tooltip-format": "{}",
+    "tooltip-format-wifi": "{signalStrength} {ipaddr}"
+  },
+  "network#ethernet": {
+    "interface": "en*",
+    "interval": 30,
+    "format-ethernet": "<span font_family='Font Awesome 6 Free'></span>",
+    "format-linked": "",
+    "format-disconnected": "",
+    "format-disabled": "",
+    "tooltip-format": "{}",
+    "tooltip-format-ethernet": "{ipaddr}"
+  },
+  "backlight": {
+        // "device": "acpi_video1",
+        "format": "{icon} {percent}%",
+	"format-icons": {
+	"default": [
+	  "<span font_family='Font Awesome 6 Free'></span>",
+	  "<span font_family='Font Awesome 6 Free'></span>",
+	  "<span font_family='Font Awesome 6 Free'></span>"
+	]
+    },
+	"on-scroll-up": "brightnessctl set 5%+",
+	"on-scroll-down": "brightnessctl set 5%-"
+    },
+    "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-bluetooth": "{icon} {volume}%",
+    "format-bluetooth-muted": "{icon} <span font_family='Font Awesome 6 Free'></span>{volume}%",
+    "format-muted": "<span font_family='Font Awesome 6 Free'></span>",
+    "format-icons": {
+      "default": [
+        "<span font_family='Font Awesome 6 Free'></span>",
+        "<span font_family='Font Awesome 6 Free'></span>",
+        "<span font_family='Font Awesome 6 Free'></span>"
+      ]
+    },
+    "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
+    "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%",
+    "on-click": "swaysettings -p sound",
+    "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+  },
+  "pulseaudio#mic": {
+      "format": "{format_source}",
+      "format-source": "<span font_family='Font Awesome 6 Free'></span> {volume}% ",
+      "format-source-muted": "<span font_family='Font Awesome 6 Free'></span>",
+      "format-icons": {
+        "headphones": "",
+        "handsfree": "",
+        "headset": "",
+        "phone": "",
+        "portable": ""
+      },
+      "on-scroll-up": "pactl set-source-volume @DEFAULT_SOURCE@ +5%",
+      "on-scroll-down": "pactl set-source-volume @DEFAULT_SOURCE@ -5%",
+      "on-click": "swaysettings -p sound",
+      "on-click-right": "pactl set-source-mute @DEFAULT_SOURCE@ toggle"
+  },
+  "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "<span font_family='Font Awesome 6 Free'></span>",
+            "deactivated": "<span font_family='Font Awesome 6 Free'></span>"
+        }
+    }
+}
